@@ -9,7 +9,7 @@ use Statamic\Statamic;
 class ServiceProvider extends AddonServiceProvider
 {
     protected $middlewareGroups = [
-        'web' => [
+        'statamic.web' => [
             Handle404::class
         ],
     ];

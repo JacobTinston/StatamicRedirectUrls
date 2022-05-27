@@ -18,7 +18,7 @@ composer require surgems/redirect-url:1.0
 ## [1.1] - 2022-05-27
 
 ``` bash
-composer require surgems/redirect-url
+composer require surgems/redirect-url:1.1
 ```
  
 ### Added
@@ -34,3 +34,19 @@ composer require surgems/redirect-url
   Removed the use of custom web routes - just uses middleware instead.
  
 ### Fixed
+
+
+## [1.1.1] - 2022-05-27
+
+``` bash
+composer require surgems/redirect-url:1.1.1
+```
+ 
+### Added
+ 
+### Changed
+ 
+### Fixed
+
+- [ServiceProvider.php](https://github.com/JacobTinston/StatamicRedirectUrls/blob/master/src/ServiceProvider.php)
+  Use __statamic.web__ middleware group insted of __web__ as it was interfering with image requests.
