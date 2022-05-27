@@ -1,6 +1,8 @@
 {
     "name": "surgems/redirect-urls",
-    "version": "1.0",
+    "description": "Statamic Addon that redirects URLs.",
+    "version": "1.1",
+    "latestVersion": "1.1",
     "autoload": {
         "psr-4": {
             "Surgems\\RedirectUrls\\": "src"
@@ -17,7 +19,7 @@
     "extra": {
         "statamic": {
             "name": "Redirect Urls",
-            "description": "Redirect Urls addon"
+            "description": "Statamic Addon that redirects URLs."
         },
         "laravel": {
             "providers": [
