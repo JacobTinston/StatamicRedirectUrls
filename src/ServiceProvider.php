@@ -14,10 +14,6 @@ class ServiceProvider extends AddonServiceProvider
         ],
     ];
 
-    protected $routes = [
-        'web' => __DIR__.'/../routes/web.php',
-    ];
-
     public function bootAddon()
     {
         $this->registerAddonConfig();
@@ -31,7 +27,7 @@ class ServiceProvider extends AddonServiceProvider
                 file_put_contents($file_path, $template);
             }
 
-            return false;
+            return $this;
         });
     }
 

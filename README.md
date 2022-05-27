@@ -6,9 +6,7 @@
 
 This addon does:
 
-- This
-- And this
-- And even this
+- Redirects legacy URL's to ones defined by the site admin.
 
 ## How to Install
 
@@ -20,4 +18,5 @@ composer require surgems/redirect-urls
 
 ## How to Use
 
-Here's where you can explain how to use this wonderful addon.
+Upon install, __redirect-urls.php__ will be created in the __/config__ directory of your Statamic project. <br>
+It will contain a boilerplate multidimensional array in which you can add/update your redirects.
