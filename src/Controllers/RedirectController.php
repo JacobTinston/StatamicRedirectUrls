@@ -2,27 +2,32 @@
 
 namespace Surgems\RedirectUrls\Controllers;
 
-use Closure;
 use Illuminate\Http\Request;
-use Statamic\Facades\OAuth;
-use Statamic\Facades\URL;
+use Symfony\Component\Yaml\Yaml;
 use Statamic\Statamic;
-use Statamic\Facades\Site;
-use Statamic\Http\Controllers;
-use Statamic\Http\Controllers\FrontendController;
-use Statamic\Http\Responses\DataResponse;
-use Statamic\Support\Arr;
 use Statamic\Support\Str;
-use Statamic\View\View;
-
-global $ARRAY_OF_REDIRECTS;
-$ARRAY_OF_REDIRECTS = include(__DIR__.'/../../../../../config/redirect-urls.php');
 
 class RedirectController
 {
     public function __construct()
     {
-        $this->array_of_redirects = $GLOBALS['ARRAY_OF_REDIRECTS'];
+        $this->import_path = __DIR__.'/../../database/redirect-urls.yaml';
+        $this->array_of_redirects = $this->setArrayOfRedirects();
+    }
+
+    public function setArrayOfRedirects($array = null)
+    {
+        if($array)
+        {
+            $yaml = Yaml::dump($array);
+            file_put_contents($this->import_path, $yaml);
+        }
+
+        $redirects_array = Yaml::parseFile($this->import_path);
+
+        $this->array_of_redirects = $redirects_array;
+
+        return $this->array_of_redirects;
     }
 
     public function createRedirect(Request $request)

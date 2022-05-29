@@ -18,5 +18,4 @@ composer require surgems/redirect-urls
 
 ## How to Use
 
-Upon install, __redirect-urls.php__ will be created in the __/config__ directory of your Statamic project. <br>
-It will contain a boilerplate multidimensional array in which you can add/update your redirects.
+Head To the CP and import CSV of redirects.
