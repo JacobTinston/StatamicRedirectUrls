@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Surgems\RedirectUrls\Controllers\RedirectController;
 
-// TODO: Refactor, test errors
 class ImportRedirectsController
 {
     public function index()
@@ -26,10 +25,12 @@ class ImportRedirectsController
         $tempPath = $file->getRealPath();
         $fileSize = $file->getSize();
         $location = 'redirect-urls/storage';
+        $filepath = public_path($location . "/" . $filename);
+        $controller = new RedirectController();
 
         $this->checkUploadedFileProperties($extension, $fileSize);
+
         $file->move($location, $filename);
-        $filepath = public_path($location . "/" . $filename);
 
         $file = fopen($filepath, "r");
         $redirects_array = array();
@@ -48,8 +49,6 @@ class ImportRedirectsController
         }
         fclose($file);
 
-        $controller = new RedirectController();
-
         $controller->setArrayOfRedirects($redirects_array);
 
         return redirect('/cp/redirect-urls/dashboard');
@@ -61,11 +60,7 @@ class ImportRedirectsController
         $maxFileSize = 2097152;
 
         if (in_array(strtolower($extension), $valid_extensions)) {
-            if ($fileSize <= $maxFileSize) {
-                //
-            } else {
-                throw new \Exception('No file was uploaded', Response::HTTP_REQUEST_ENTITY_TOO_LARGE);
-            }
+            if ($fileSize > $maxFileSize) throw new \Exception('No file was uploaded', Response::HTTP_REQUEST_ENTITY_TOO_LARGE);
         } else {
             throw new \Exception('Invalid file extension', Response::HTTP_UNSUPPORTED_MEDIA_TYPE);
         }
