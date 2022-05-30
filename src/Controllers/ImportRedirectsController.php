@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Surgems\RedirectUrls\Controllers\RedirectController;
 
+// TODO: Refactor, test errors
 class ImportRedirectsController
 {
     public function index()

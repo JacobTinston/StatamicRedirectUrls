@@ -18,7 +18,7 @@
             <h3 style="text-align:center;border-bottom:2px solid #000;padding-bottom:10px"><b>To</b></h3>
             <h3 style="text-align:center;border-bottom:2px solid #000;padding-bottom:10px"><b>Type</b></h3>
 
-            @if (count($redirects) > 1)
+            @if (count($redirects) > 0)
                 @foreach ($redirects as $redirect)
                     <p style="display:flex:align-items:center;padding:10px;">{{ $redirect[0] }}</p>
                     <p style="display:flex:align-items:center;padding:10px;border-left: 2px solid #000;border-right: 2px solid #000">{{ $redirect[1] }}</p>

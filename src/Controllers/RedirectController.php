@@ -3,9 +3,8 @@
 namespace Surgems\RedirectUrls\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Symfony\Component\Yaml\Yaml;
-use Statamic\Statamic;
-use Statamic\Support\Str;
 
 class RedirectController
 {
@@ -23,7 +22,7 @@ class RedirectController
             file_put_contents($this->import_path, $yaml);
         }
 
-        $redirects_array = Yaml::parseFile($this->import_path);
+        $redirects_array = Yaml::parseFile($this->import_path) ? Yaml::parseFile($this->import_path) : array();
 
         $this->array_of_redirects = $redirects_array;
 
@@ -32,32 +31,49 @@ class RedirectController
 
     public function createRedirect(Request $request)
     {
-        $uri = $this->formatStr('/'.$request->path());
+        $current_uri = $this->formatUrl('/'.$request->path());
 
-        foreach($this->array_of_redirects as $redirect_pair)
+        if(count($this->array_of_redirects) > 0)
         {
-            if($redirect_pair[0] === $uri) {
-                return $redirect_pair[1];
+            foreach($this->array_of_redirects as $redirect)
+            {
+                $from_uri = $this->formatUrl($redirect[0]);
+                $to_uri = $this->formatUrl($redirect[1]);
+                $redirect_type = array_key_exists(2, $redirect) ? intval($redirect[2]) : 301;
+
+                if($from_uri === $current_uri) {
+                    return array($to_uri, $redirect_type);
+                }
             }
         }
 
-        return false;
+        return null;
     }
 
-    public function formatStr($str)
+    public function formatUrl($url)
     {
-        if (Statamic::isAmpRequest()) {
-            $str = str_after($str, '/'.config('statamic.amp.route'));
+        if(Str::contains($url, 'http://'))
+        {
+            $prefix = 'http://'.$_SERVER['HTTP_HOST'];
+            $url = str_replace($prefix, '', $url);
         }
 
-        if (Str::contains($str, '?')) {
-            $str = substr($str, 0, strpos($str, '?'));
+        if(Str::contains($url, 'https://'))
+        {
+            $prefix = 'https://'.$_SERVER['HTTP_HOST'];
+            $url = str_replace($prefix, '', $url);
         }
 
-        if (Str::endsWith($str, '/') && Str::length($str) > 1) {
-            $str = rtrim($str, '/');
+        if(Str::contains($url, '?')) 
+        {
+            $url = substr($url, 0, strpos($url, '?'));
         }
 
-        return $str;
+        if(Str::endsWith($url, '/') && Str::length($url) > 1) 
+        {
+            $url = rtrim($url, '/');
+        }
+
+        return $url;
     }
 }

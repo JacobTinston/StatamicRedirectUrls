@@ -3,15 +3,15 @@
 namespace Surgems\RedirectUrls;
 
 use Statamic\Providers\AddonServiceProvider;
-use Surgems\RedirectUrls\Middleware\Handle404;
 use Statamic\Statamic;
 use Statamic\Facades\CP\Nav;
+use Surgems\RedirectUrls\Middleware\HandleRedirects;
 
 class ServiceProvider extends AddonServiceProvider
 {
     protected $middlewareGroups = [
         'statamic.web' => [
-            Handle404::class
+            HandleRedirects::class
         ],
     ];
 
@@ -21,10 +21,25 @@ class ServiceProvider extends AddonServiceProvider
 
     public function bootAddon()
     {
-        $this->createDatabase();
-        $this->bootAddonConfig();
-        $this->bootAddonViews();
-        $this->bootAddonNav();
+        $this->createDatabase()
+             ->bootAddonConfig()
+             ->bootAddonNav()
+             ->bootAddonViews();
+    }
+
+    protected function createDatabase()
+    {
+        $location = 'redirect-urls/database';
+
+        if (! file_exists(public_path($location))) {
+            mkdir(public_path($location), 0777, true);
+        }
+
+        if (! file_exists(public_path($location . '/redirect-urls.yaml'))) {
+            fopen(public_path($location . '/redirect-urls.yaml'), 'c+');
+        }
+
+        return $this;
     }
 
     protected function bootAddonConfig()
@@ -33,14 +48,6 @@ class ServiceProvider extends AddonServiceProvider
 
         return $this;
     }
-
-    protected function bootAddonViews()
-    {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'redirect-urls');
-
-        return $this;
-    }
-
 
     protected function bootAddonNav()
     {
@@ -56,19 +63,10 @@ class ServiceProvider extends AddonServiceProvider
         return $this;
     }
 
-    protected function createDatabase()
+    protected function bootAddonViews()
     {
-        $location = 'redirect-urls/database';
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'redirect-urls');
 
-        if (! file_exists(public_path($location))) {
-            mkdir(public_path($location), 0777, true);
-        }
-
-        if (! file_exists(public_path($location . '/redirect-urls.yaml'))) {
-            file_put_contents(public_path($location . '/redirect-urls.yaml'), 
-'1:
-    -
-');
-        }
+        return $this;
     }
 }
