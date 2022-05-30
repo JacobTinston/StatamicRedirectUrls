@@ -55,7 +55,7 @@ composer require surgems/redirect-urls:1.1.1
 ## [1.2] - 2022-05-29
 
 ``` bash
-composer require surgems/redirect-urls
+composer require surgems/redirect-urls:1.2
 ```
  
 ### Added
@@ -67,5 +67,19 @@ composer require surgems/redirect-urls
 
 - Removed the hardcoded array
 - Use YAML instead of PHP arrays to store redirects
+ 
+### Fixed
+
+## [1.2.1] - 2022-05-30
+
+``` bash
+composer require surgems/redirect-urls
+```
+ 
+### Added
+ 
+### Changed
+
+- Changed location of the redirects database file
  
 ### Fixed

@@ -21,12 +21,13 @@ class ServiceProvider extends AddonServiceProvider
 
     public function bootAddon()
     {
-        $this->registerAddonConfig();
+        $this->createDatabase();
+        $this->bootAddonConfig();
         $this->bootAddonViews();
         $this->bootAddonNav();
     }
 
-    protected function registerAddonConfig()
+    protected function bootAddonConfig()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'statamic.redirect-urls');
 
@@ -53,5 +54,21 @@ class ServiceProvider extends AddonServiceProvider
         });
 
         return $this;
+    }
+
+    protected function createDatabase()
+    {
+        $location = 'redirect-urls/database';
+
+        if (! file_exists(public_path($location))) {
+            mkdir(public_path($location), 0777, true);
+        }
+
+        if (! file_exists(public_path($location . '/redirect-urls.yaml'))) {
+            file_put_contents(public_path($location . '/redirect-urls.yaml'), 
+'1:
+    -
+');
+        }
     }
 }

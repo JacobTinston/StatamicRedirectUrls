@@ -11,7 +11,7 @@ class RedirectController
 {
     public function __construct()
     {
-        $this->import_path = __DIR__.'/../../database/redirect-urls.yaml';
+        $this->import_path = public_path('redirect-urls/database/redirect-urls.yaml');
         $this->array_of_redirects = $this->setArrayOfRedirects();
     }
 
