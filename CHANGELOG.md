@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.2.3] - 2022-05-30
+## [1.2.4] - 2022-05-30
 
 ``` bash
 composer require surgems/redirect-urls
@@ -12,20 +12,6 @@ composer require surgems/redirect-urls
 ### Changed
 
 - CP Nav layout and styling
- 
-### Fixed
-
-
-## [1.2.2] - 2022-05-30
-
-``` bash
-composer require surgems/redirect-urls:1.2.2
-```
- 
-### Added
- 
-### Changed
-
 - Refactored code
  
 ### Fixed
