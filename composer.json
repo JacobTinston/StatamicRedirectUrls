@@ -3,6 +3,9 @@
     "description": "Statamic Addon that redirects URLs.",
     "version": "1.2.4",
     "latestVersion": "1.2.4",
+    "license":[
+        "https://github.com/JacobTinston/StatamicRedirectUrls/blob/master/LICENSE"
+    ],
     "autoload": {
         "psr-4": {
             "Surgems\\RedirectUrls\\": "src"
