@@ -2,57 +2,78 @@
 
 namespace Surgems\RedirectUrls\Controllers;
 
-use Closure;
 use Illuminate\Http\Request;
-use Statamic\Facades\OAuth;
-use Statamic\Facades\URL;
-use Statamic\Statamic;
-use Statamic\Facades\Site;
-use Statamic\Http\Controllers;
-use Statamic\Http\Controllers\FrontendController;
-use Statamic\Http\Responses\DataResponse;
-use Statamic\Support\Arr;
-use Statamic\Support\Str;
-use Statamic\View\View;
-
-global $ARRAY_OF_REDIRECTS;
-$ARRAY_OF_REDIRECTS = include(__DIR__.'/../../../../../config/redirect-urls.php');
+use Illuminate\Support\Str;
+use Symfony\Component\Yaml\Yaml;
 
 class RedirectController
 {
     public function __construct()
     {
-        $this->array_of_redirects = $GLOBALS['ARRAY_OF_REDIRECTS'];
+        $this->import_path = public_path('redirect-urls/database/redirect-urls.yaml');
+        $this->array_of_redirects = $this->setArrayOfRedirects();
+    }
+
+    public function setArrayOfRedirects($array = null)
+    {
+        if($array)
+        {
+            $yaml = Yaml::dump($array);
+            file_put_contents($this->import_path, $yaml);
+        }
+
+        $redirects_array = Yaml::parseFile($this->import_path) ? Yaml::parseFile($this->import_path) : array();
+
+        $this->array_of_redirects = $redirects_array;
+
+        return $this->array_of_redirects;
     }
 
     public function createRedirect(Request $request)
     {
-        $uri = $this->formatStr('/'.$request->path());
+        $current_uri = $this->formatUrl('/'.$request->path());
 
-        foreach($this->array_of_redirects as $redirect_pair)
+        if(count($this->array_of_redirects) > 0)
         {
-            if($redirect_pair[0] === $uri) {
-                return $redirect_pair[1];
+            foreach($this->array_of_redirects as $redirect)
+            {
+                $from_uri = $this->formatUrl($redirect[0]);
+                $to_uri = $this->formatUrl($redirect[1]);
+                $redirect_type = array_key_exists(2, $redirect) ? intval($redirect[2]) : 301;
+
+                if($from_uri === $current_uri) {
+                    return array($to_uri, $redirect_type);
+                }
             }
         }
 
-        return false;
+        return null;
     }
 
-    public function formatStr($str)
+    public function formatUrl($url)
     {
-        if (Statamic::isAmpRequest()) {
-            $str = str_after($str, '/'.config('statamic.amp.route'));
+        if(Str::contains($url, 'http://'))
+        {
+            $prefix = 'http://'.$_SERVER['HTTP_HOST'];
+            $url = str_replace($prefix, '', $url);
         }
 
-        if (Str::contains($str, '?')) {
-            $str = substr($str, 0, strpos($str, '?'));
+        if(Str::contains($url, 'https://'))
+        {
+            $prefix = 'https://'.$_SERVER['HTTP_HOST'];
+            $url = str_replace($prefix, '', $url);
         }
 
-        if (Str::endsWith($str, '/') && Str::length($str) > 1) {
-            $str = rtrim($str, '/');
+        if(Str::contains($url, '?')) 
+        {
+            $url = substr($url, 0, strpos($url, '?'));
         }
 
-        return $str;
+        if(Str::endsWith($url, '/') && Str::length($url) > 1) 
+        {
+            $url = rtrim($url, '/');
+        }
+
+        return $url;
     }
 }
