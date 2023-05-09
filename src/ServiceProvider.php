@@ -10,9 +10,14 @@ use Surgems\RedirectUrls\Contracts\RedirectRepository as RepositoryContract;
 use Surgems\RedirectUrls\Http\Middleware\HandleRedirects;
 use Surgems\RedirectUrls\Stache\Repositories\RedirectRepository;
 use Surgems\RedirectUrls\Stache\Stores\RedirectStore;
+use Surgems\RedirectUrls\UpdateScripts\MoveRedirectsToStacheStorage;
 
 class ServiceProvider extends AddonServiceProvider
 {
+    protected $updateScripts = [
+        MoveRedirectsToStacheStorage::class,
+    ];
+
     protected $middlewareGroups = [
         'statamic.web' => [
             HandleRedirects::class,
