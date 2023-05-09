@@ -2,10 +2,31 @@
 All notable changes to this project will be documented in this file.
 test
 
-## [1.2.4] - 2022-05-30
+## [2.0.0] - 2023-05-09
 
 ``` bash
 composer require surgems/redirect-urls
+```
+ 
+### Added
+
+- Redirects stored as individual rows in Stache
+- Helpful Redirect facade to create redirects
+ 
+### Changed
+
+- Imported CSV's are not saved anymore
+- redirect-urls.yaml in public folder rendered useless
+ 
+### Fixed
+
+- Can add new redirects without erasing old ones
+
+
+## [1.2.4] - 2022-05-30
+
+``` bash
+composer require surgems/redirect-urls:1.2.4
 ```
  
 ### Added
@@ -66,7 +87,7 @@ composer require surgems/redirect-urls:1.1.1
  
 ### Fixed
 
-- Use __statamic.web__ middleware group insted of __web__ as it was interfering with image requests.
+- Use __statamic.web__ middleware group instead of __web__ as it was interfering with image requests.
 
 
 ## [1.1] - 2022-05-27

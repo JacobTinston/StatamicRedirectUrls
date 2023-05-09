@@ -15,11 +15,10 @@ class ServiceProvider extends AddonServiceProvider
 {
     protected $middlewareGroups = [
         'statamic.web' => [
-            HandleRedirects::class
+            HandleRedirects::class,
         ],
     ];
 
-    
     protected $routes = [
         'cp' => __DIR__.'/../routes/cp.php',
     ];
