@@ -6,23 +6,31 @@ use Statamic\Facades\CP\Nav;
 use Statamic\Providers\AddonServiceProvider;
 use Statamic\Stache\Stache;
 use Statamic\Statamic;
-use Surgems\RedirectUrls\Facades\Redirect;
-use Surgems\RedirectUrls\Contracts\Redirects\RedirectRepository;
+use Surgems\RedirectUrls\Contracts\RedirectRepository as RepositoryContract;
 use Surgems\RedirectUrls\Http\Middleware\HandleRedirects;
+use Surgems\RedirectUrls\Stache\Repositories\RedirectRepository;
 use Surgems\RedirectUrls\Stache\Stores\RedirectStore;
 
 class ServiceProvider extends AddonServiceProvider
 {
+    protected $middlewareGroups = [
+        'statamic.web' => [
+            HandleRedirects::class
+        ],
+    ];
+
+    
     protected $routes = [
         'cp' => __DIR__.'/../routes/cp.php',
     ];
 
-    public function registerAddon()
+    public function register()
     {
-        $this->app->singleton(RedirectRepository::class, function () {
-            $class = Redirect::class;
+        Statamic::repository(RepositoryContract::class, RedirectRepository::class);
 
-            return new $class($this->app['stache']);
+        $this->app->singleton(\Statamic\Contracts\Data\DataRepository::class, function ($app) {
+            return (new \Statamic\Data\DataRepository)
+                ->setRepository('redirect-urls', \Surgems\RedirectUrls\Contracts\RedirectRepository::class);
         });
     }
 
@@ -32,8 +40,6 @@ class ServiceProvider extends AddonServiceProvider
             ->bootAddonNav()
             ->bootAddonViews()
             ->bootStores();
-            
-        app('router')->prependMiddlewareToGroup('statamic.web', HandleRedirects::class);
     }
 
     protected function bootAddonConfig()

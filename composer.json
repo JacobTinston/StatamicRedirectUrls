@@ -41,7 +41,9 @@
         }
     },
     "require": {
-        "laravel/pint": "^1.10",
         "spatie/simple-excel": "^3.1"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.10"
     }
 }
