@@ -3,8 +3,6 @@
 namespace Surgems\RedirectUrls\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Cache;
 use Spatie\SimpleExcel\SimpleExcelReader;
 use Surgems\RedirectUrls\Facades\Redirect;
 
@@ -18,7 +16,7 @@ class ImportRedirectsController
     public function store(Request $request)
     {
         $request->validate([
-            'file' => ['required', 'file']
+            'file' => ['required', 'file'],
         ]);
 
         $file = $request->file('file');
@@ -32,23 +30,19 @@ class ImportRedirectsController
         $skipped = 0;
         $reader->getRows()->each(function (array $data) use (&$skipped) {
             if (! $data['From'] || ! $data['To'] || ! $data['Type']) {
-                $skipped++;
-
-                return;
+                return $skipped++;
             }
 
             try {
                 $redirect = Redirect::make()
-                ->from($data['From'])
-                ->to($data['To'])
-                ->type($data['Type'])
-                ->active(true);
+                    ->from($data['From'])
+                    ->to($data['To'])
+                    ->type($data['Type'])
+                    ->active(true);
 
                 $redirect->save();
-            } catch(\Exception $e) {
-                $skipped++;
-
-                return;
+            } catch (\Exception $e) {
+                return $skipped++;
             }
         });
 
@@ -60,8 +54,6 @@ class ImportRedirectsController
 
         session()->flash('success', $message);
 
-        Cache::forget('statamic.redirect.redirect-urls');
-
-        return redirect()->action(DashboardController::class);
+        return redirect()->route('statamic.cp.redirect-urls.dashboard');
     }
 }

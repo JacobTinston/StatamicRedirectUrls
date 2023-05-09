@@ -6,7 +6,7 @@ use Surgems\RedirectUrls\Facades\Redirect;
 
 class DashboardController
 {
-    public function __invoke()
+    public function index()
     {
         $redirects = Redirect::all();
 

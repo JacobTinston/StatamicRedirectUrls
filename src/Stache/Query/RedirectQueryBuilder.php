@@ -4,7 +4,6 @@ namespace Surgems\RedirectUrls\Stache\Query;
 
 use Statamic\Data\DataCollection;
 use Statamic\Stache\Query\Builder;
-use Statamic\Contracts\Entries\QueryBuilder;
 
 class RedirectQueryBuilder extends Builder
 {
@@ -25,7 +24,7 @@ class RedirectQueryBuilder extends Builder
                 ->index($where['column'])->items();
 
             $keys = $this->filterWhereBasic($items, $where)->keys();
-            
+
             return $ids ? $ids->intersect($keys)->values() : $keys;
         });
     }

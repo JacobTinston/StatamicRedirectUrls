@@ -2,7 +2,6 @@
 
 namespace Surgems\RedirectUrls\Facades;
 
-use Statamic\Data\DataCollection;
 use Statamic\Data\ExistsAsFile;
 use Statamic\Data\TracksQueriedColumns;
 use Statamic\Data\TracksQueriedRelations;
@@ -45,8 +44,8 @@ class Redirect
     public static function all()
     {
         return self::query()
-        ->where('active', true)
-        ->get();
+            ->where('active', true)
+            ->get();
     }
 
     public static function find($id): ?self

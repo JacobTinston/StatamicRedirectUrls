@@ -17,21 +17,14 @@ class RedirectStore extends BasicStore
     {
         $data = YAML::file($path)->parse($contents);
 
-        if (! $id = array_pull($data, 'id')) {
-            $idGenerated = true;
-            $id = app('stache')->generateId();
-        }
-
         $redirect = Redirect::make()
-            ->id($id)
+            ->id(array_pull($data, 'id') ?? app('stache')->generateId())
             ->from(array_pull($data, 'From'))
             ->to(array_pull($data, 'To'))
             ->type(array_pull($data, 'Type'))
             ->active(true);
 
-        if (isset($idGenerated)) {
-            $redirect->save();
-        }
+        $redirect->save();
 
         return $redirect;
     }
