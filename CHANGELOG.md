@@ -1,5 +1,6 @@
 # Change Log
 All notable changes to this project will be documented in this file.
+test
 
 ## [1.2.4] - 2022-05-30
 
