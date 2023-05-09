@@ -1,21 +1,40 @@
-# Redirect Urls
+# Redirect URL's
 
-> Redirect Urls is a Statamic addon that does something pretty neat.
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/surgems/package-development.svg?style=flat-square)](https://packagist.org/packages/surgems/redirect-urls)
+[![Total Downloads](https://img.shields.io/packagist/dt/surgems/package-development.svg?style=flat-square)](https://packagist.org/packages/surgems/redirect-urls)
+![GitHub Actions](https://github.com/surgems/redirect-urls/actions/workflows/main.yml/badge.svg)
 
-## Features
+> Redirect URL's allows you to redirect inactive domains on your Statamic site.
 
-This addon does:
+## Installation
 
-- Redirects legacy URL's to ones defined by the site admin.
+You can install the package via composer:
 
-## How to Install
-
-You can use this addon by running the following command from your project root:
-
-``` bash
+```bash
 composer require surgems/redirect-urls
 ```
 
-## How to Use
+## Usage
 
 Head To the CP and import CSV of redirects.
+
+### Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+
+### Security
+
+If you discover any security related issues, please email help@surgems.co.uk instead of using the issue tracker.
+
+## Credits
+
+-   [Jacob Tinston](https://github.com/surgems)
+-   [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

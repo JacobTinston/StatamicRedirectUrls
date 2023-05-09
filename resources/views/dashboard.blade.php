@@ -4,9 +4,11 @@
 @section('content')
 
     @if (count($redirects) > 0)
-    <header class="mb-3">
+        <header class="mb-3">
              <div class="flex items-center">
                 <h1 class="flex-1">Redirect Urls</h1> 
+
+                <!--
                 <div class="popover-container dropdown-list mr-1">
                     <div aria-haspopup="true">
                         <button aria-label="Open Dropdown" class="rotating-dots-button">
@@ -24,6 +26,7 @@
                         </div>
                     </div>
                 </div>
+                -->
                 
                 <div class="popover-container dropdown-list inline-block">
                     <a href="{{ cp_route('redirect-urls.import') }}">
@@ -36,16 +39,68 @@
         <div class="card content p-2 my-3 overflow-x-scroll">
             <h2 class="mb-4 text-center">Active Redirects</h2>
 
-            <div class="grid grid-cols-3">
-                <h3 class="text-center border-b-2 pb-1 m-0"><b>From</b></h3>
-                <h3 class="text-center border-l-2 border-r-2 border-b-2 pb-1 m-0"><b>To</b></h3>
-                <h3 class="text-center border-b-2 pb-1 m-0"><b>Type</b></h3>
+            <table tabindex="0" class="data-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <span>From</span>
+                        </th>
+                        <th>
+                            <span>To</span>
+                        </th>
+                        <th>
+                            <span>Type</span>
+                        </th>
+                        <th class="actions-column"></th>
+                    </tr>
+                </thead> 
+                <tbody tabindex="0"> 
                     @foreach ($redirects as $redirect)
-                        <p class="flex align-center p-1 m-0">{{ $redirect[0] }}</p>
-                        <p class="flex align-center p-1 m-0 border-l-2 border-r-2">{{ $redirect[1] }}</p>
-                        <p class="flex align-center justify-center p-1 m-0">{{ $redirect[2] }}</p>
+                        <tr class="sortable-row outline-none" tabindex="0">
+                            <td>
+                                <span>{{ $redirect->from() }}</span>
+                            </td>
+                            <td>
+                                <span>{{ $redirect->to() }}</span>
+                            </td>
+                            <td>
+                                <span>{{ $redirect->type() }}</span>
+                            </td>
+                            <td class="actions-column">
+                                <dropdown-list class="mr-1">
+                                    <dropdown-item :text="__('Edit')" redirect="{{ cp_route('redirect-urls.edit', ['id' => $redirect->id()]) }}"></dropdown-item>
+                                    <dropdown-item :class="__('warning')" :text="__('Delete')" redirect="{{ cp_route('redirect-urls.delete', ['id' => $redirect->id()]) }}"></dropdown-item>
+                                </dropdown-list>
+                            </td>
+                        </tr>
                     @endforeach
-            </div>
+                </tbody>
+            </table>
+
+            <!--
+            <table class="data-table">
+                <tbody>
+                    <thead>
+                        <tr>
+                            <td class="p-1">From</td> 
+                            <td class="p-1">To</td> 
+                            <td class="p-1">Type</td>
+                        </tr>
+                    </thead>
+                    @foreach ($redirects as $redirect)
+                        <tr>
+                            <td>{{ $redirect->from() }}</td> 
+                            <td>{{ $redirect->to() }}</td> 
+                            <td>{{ $redirect->type() }}</td>
+                            <td class="text-right">
+                                <a class="p-1">Edit</a>
+                                <span class="badge-sm bg-red btn-sm">Delete</span>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            -->
         </div>
     @else
         <div class="no-results md:pt-8 max-w-2xl mx-auto">

@@ -2,10 +2,14 @@
 
 namespace Surgems\RedirectUrls;
 
-use Statamic\Providers\AddonServiceProvider;
-use Statamic\Statamic;
+use Illuminate\Support\Facades\Storage;
 use Statamic\Facades\CP\Nav;
-use Surgems\RedirectUrls\Middleware\HandleRedirects;
+use Statamic\Providers\AddonServiceProvider;
+use Statamic\Stache\Stache;
+use Statamic\Statamic;
+use Surgems\RedirectUrls\Contracts\Redirects\RedirectRepository;
+use Surgems\RedirectUrls\Http\Middleware\HandleRedirects;
+use Surgems\RedirectUrls\Stache\Stores\RedirectStore;
 
 class ServiceProvider extends AddonServiceProvider
 {
@@ -21,25 +25,15 @@ class ServiceProvider extends AddonServiceProvider
 
     public function bootAddon()
     {
-        $this->createDatabase()
-             ->bootAddonConfig()
+        $this->bootAddonConfig()
              ->bootAddonNav()
-             ->bootAddonViews();
-    }
+             ->bootAddonViews()
+             ->bootStores();
 
-    protected function createDatabase()
-    {
-        $location = 'redirect-urls/database';
-
-        if (! file_exists(public_path($location))) {
-            mkdir(public_path($location), 0777, true);
-        }
-
-        if (! file_exists(public_path($location . '/redirect-urls.yaml'))) {
-            fopen(public_path($location . '/redirect-urls.yaml'), 'c+');
-        }
-
-        return $this;
+        $this->app->bind(
+            Statamic\Contracts\Entries\Entry::class,
+            RedirectRepository::class
+        );
     }
 
     protected function bootAddonConfig()
@@ -66,6 +60,15 @@ class ServiceProvider extends AddonServiceProvider
     protected function bootAddonViews()
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'redirect-urls');
+
+        return $this;
+    }
+
+    protected function bootStores()
+    {
+        $store = new RedirectStore();
+        $store->directory(base_path('content/redirect-urls'));
+        app(Stache::class)->registerStore($store);
 
         return $this;
     }

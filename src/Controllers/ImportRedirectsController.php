@@ -4,7 +4,9 @@ namespace Surgems\RedirectUrls\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Surgems\RedirectUrls\Controllers\RedirectController;
+use Illuminate\Support\Facades\Cache;
+use Spatie\SimpleExcel\SimpleExcelReader;
+use Surgems\RedirectUrls\Facades\Redirect;
 
 class ImportRedirectsController
 {
@@ -20,49 +22,46 @@ class ImportRedirectsController
         ]);
 
         $file = $request->file('file');
-        $filename = $file->getClientOriginalName();
-        $extension = $file->getClientOriginalExtension();
-        $tempPath = $file->getRealPath();
-        $fileSize = $file->getSize();
-        $location = 'redirect-urls/storage';
-        $filepath = public_path($location . "/" . $filename);
-        $controller = new RedirectController();
+        $delimiter = ',';
 
-        $this->checkUploadedFileProperties($extension, $fileSize);
+        $extension = with($file->extension(), fn ($ext) => $ext === 'txt' ? 'csv' : $ext);
 
-        $file->move($location, $filename);
+        $reader = SimpleExcelReader::create($file->getRealPath(), $extension)
+            ->useDelimiter($delimiter);
 
-        $file = fopen($filepath, "r");
-        $redirects_array = array();
-        $i = 0;
-        while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
-            $num = count($filedata);
-            if ($i == 0) {
-                $i++;
-                continue;
-            }
-                for ($c = 0; $c < $num; $c++) {
-                $redirects_array[$i][] = $filedata[$c];
+        $skipped = 0;
+        $reader->getRows()->each(function (array $data) use (&$skipped) {
+            if (! $data['From'] || ! $data['To'] || ! $data['Type']) {
+                $skipped++;
+
+                return;
             }
 
-            $i++;
+            try {
+                $redirect = Redirect::make()
+                ->from($data['From'])
+                ->to($data['To'])
+                ->type($data['Type'])
+                ->active(true);
+
+                $redirect->save();
+            } catch(\Exception $e) {
+                $skipped++;
+
+                return;
+            }
+        });
+
+        $message = 'Redirects imported successfully.';
+
+        if ($skipped > 0) {
+            $message .= " {$skipped} rows skipped due to invalid data.";
         }
-        fclose($file);
 
-        $controller->setArrayOfRedirects($redirects_array);
+        session()->flash('success', $message);
 
-        return redirect('/cp/redirect-urls/dashboard');
-    }
+        Cache::forget('statamic.redirect.redirect-urls');
 
-    protected function checkUploadedFileProperties($extension, $fileSize)
-    {
-        $valid_extensions = array("csv", "xlsx");
-        $maxFileSize = 2097152;
-
-        if (in_array(strtolower($extension), $valid_extensions)) {
-            if ($fileSize > $maxFileSize) throw new \Exception('No file was uploaded', Response::HTTP_REQUEST_ENTITY_TOO_LARGE);
-        } else {
-            throw new \Exception('Invalid file extension', Response::HTTP_UNSUPPORTED_MEDIA_TYPE);
-        }
+        return redirect()->action(DashboardController::class);
     }
 }

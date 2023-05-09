@@ -2,13 +2,13 @@
 
 namespace Surgems\RedirectUrls\Controllers;
 
-use Surgems\RedirectUrls\Controllers\RedirectController;
+use Surgems\RedirectUrls\Facades\Redirect;
 
-class DashboardController extends RedirectController
+class DashboardController
 {
     public function __invoke()
     {
-        $redirects = $this->array_of_redirects ? $this->array_of_redirects : array();
+        $redirects = Redirect::all();
 
         return view('redirect-urls::dashboard', ['redirects' => $redirects]);
     }
