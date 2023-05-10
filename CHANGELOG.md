@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file.
 test
 
+## [2.1.2] - 2023-05-10
+ 
+### Added
+ 
+### Changed
+ 
+### Fixed
+
+- Fix binding RedirectRepository to DataRepository causing 404
+
+
 ## [2.1.1] - 2023-05-10
  
 ### Added

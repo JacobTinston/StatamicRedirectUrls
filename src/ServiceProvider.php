@@ -31,11 +31,6 @@ class ServiceProvider extends AddonServiceProvider
     public function register()
     {
         Statamic::repository(RepositoryContract::class, RedirectRepository::class);
-
-        $this->app->singleton(\Statamic\Contracts\Data\DataRepository::class, function ($app) {
-            return (new \Statamic\Data\DataRepository)
-                ->setRepository('redirect-urls', \Surgems\RedirectUrls\Contracts\RedirectRepository::class);
-        });
     }
 
     public function bootAddon()
