@@ -29,19 +29,26 @@ class ImportRedirectsController
 
         $skipped = 0;
         $reader->getRows()->each(function (array $data) use (&$skipped) {
-            if (! $data['From'] || ! $data['To'] || ! $data['Type']) {
-                return $skipped++;
-            }
-
-            try {
-                $redirect = Redirect::make()
-                    ->from($data['From'])
-                    ->to($data['To'])
-                    ->type($data['Type'])
-                    ->active(true);
-
-                $redirect->save();
-            } catch (\Exception $e) {
+            $data = array_values($data);
+        
+            $from = isset($data[0]) ? parse_url($data[0])['path'] : '/';
+            $to = isset($data[1]) ? parse_url($data[1])['path'] : '/';
+            $type = isset($data[2]) ? intval($data[2]) : 301;
+            $active = $data[3] ?? true;
+        
+            if ($from != '/' && !Redirect::query()->where('from', $from)->first()) {
+                try {
+                    $redirect = Redirect::make()
+                        ->from($from)
+                        ->to($to)
+                        ->type($type)
+                        ->active($active);
+        
+                    $redirect->save();
+                } catch (\Exception $e) {
+                    return $skipped++;
+                }
+            } else {
                 return $skipped++;
             }
         });

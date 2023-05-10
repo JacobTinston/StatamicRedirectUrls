@@ -24,13 +24,13 @@ class RedirectStore extends BasicStore
 
         $redirect = Redirect::make()
             ->id($id)
-            ->from(array_pull($data, 'From'))
-            ->to(array_pull($data, 'To'))
-            ->type(array_pull($data, 'Type'))
+            ->from(array_pull($data, 'from'))
+            ->to(array_pull($data, 'to'))
+            ->type(array_pull($data, 'type'))
             ->active(true);
 
         if (isset($idGenerated)) {
-            $redirect->writeFile();
+            $redirect->save();
         }
 
         return $redirect;

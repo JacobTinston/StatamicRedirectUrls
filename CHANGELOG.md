@@ -2,11 +2,18 @@
 All notable changes to this project will be documented in this file.
 test
 
-## [2.1.0] - 2023-05-09
+## [2.1.1] - 2023-05-10
+ 
+### Added
+ 
+### Changed
 
-``` bash
-composer require surgems/redirect-urls
-```
+- Improved import process
+ 
+### Fixed
+
+
+## [2.1.0] - 2023-05-09
  
 ### Added
 
@@ -39,10 +46,6 @@ composer require surgems/redirect-urls
 
 
 ## [1.2.4] - 2022-05-30
-
-``` bash
-composer require surgems/redirect-urls:1.2.4
-```
  
 ### Added
  
@@ -57,10 +60,6 @@ composer require surgems/redirect-urls:1.2.4
 
 
 ## [1.2.1] - 2022-05-30
-
-``` bash
-composer require surgems/redirect-urls:1.2.1
-```
  
 ### Added
  
@@ -72,10 +71,6 @@ composer require surgems/redirect-urls:1.2.1
 
 
 ## [1.2] - 2022-05-29
-
-``` bash
-composer require surgems/redirect-urls:1.2
-```
  
 ### Added
 
@@ -91,10 +86,6 @@ composer require surgems/redirect-urls:1.2
 
 
 ## [1.1.1] - 2022-05-27
-
-``` bash
-composer require surgems/redirect-urls:1.1.1
-```
  
 ### Added
  
@@ -106,10 +97,6 @@ composer require surgems/redirect-urls:1.1.1
 
 
 ## [1.1] - 2022-05-27
-
-``` bash
-composer require surgems/redirect-urls:1.1
-```
  
 ### Added
 
@@ -126,7 +113,7 @@ composer require surgems/redirect-urls:1.1
 ## [Release] - 2022-05-26
 
 ``` bash
-composer require surgems/redirect-urls:1.0
+composer require surgems/redirect-urls:1.x
 ```
  
 ### Added

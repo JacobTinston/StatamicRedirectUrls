@@ -37,7 +37,7 @@
         </header>
 
         <div class="card content p-2 my-3 overflow-x-scroll">
-            <h2 class="mb-4 text-center">Active Redirects</h2>
+            <h2 class="mb-4 text-center">{{ count($redirects) }} Active Redirects</h2>
 
             <table tabindex="0" class="data-table">
                 <thead>

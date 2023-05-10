@@ -13,6 +13,6 @@ class RedirectController
 
         session()->flash('success', 'Redirect deleted successfully.');
 
-        return redirect()->action(DashboardController::class);
+        return redirect()->route('statamic.cp.redirect-urls.dashboard');
     }
 }

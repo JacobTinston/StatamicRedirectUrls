@@ -10,7 +10,7 @@ class MoveRedirectsToStacheStorage extends UpdateScript
 {
     public function shouldUpdate($newVersion, $oldversion)
     {
-        return $this->isUpdatingTo('2.1.0');
+        return $this->isUpdatingTo('2.1');
     }
 
     public function update()
