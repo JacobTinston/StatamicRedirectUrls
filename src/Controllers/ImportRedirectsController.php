@@ -31,8 +31,8 @@ class ImportRedirectsController
         $reader->getRows()->each(function (array $data) use (&$skipped) {
             $data = array_values($data);
 
-            $from = isset($data[0]) ? parse_url($data[0])['path'] : '/';
-            $to = isset($data[1]) ? parse_url($data[1])['path'] : '/';
+            $from = isset($data[0]) ? rtrim(parse_url($data[0])['path'], '/') : '/';
+            $to = isset($data[1]) ? rtrim(parse_url($data[1])['path'], '/') : '/';
             $type = isset($data[2]) ? intval($data[2]) : 301;
             $active = $data[3] ?? true;
 

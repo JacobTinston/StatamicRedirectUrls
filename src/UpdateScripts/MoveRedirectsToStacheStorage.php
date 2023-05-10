@@ -20,14 +20,23 @@ class MoveRedirectsToStacheStorage extends UpdateScript
 
         if (count($redirects)) {
             foreach ($redirects as $redirect) {
-                if (! Redirect::query()->where('from', $redirect[0])->first()) {
-                    $stached_redirect = Redirect::make()
-                        ->from($redirect[0])
-                        ->to($redirect[1])
-                        ->type($redirect[2])
-                        ->active(true);
+                $from = isset($redirect[0]) ? rtrim(parse_url($redirect[0])['path'], '/') : '/';
+                $to = isset($redirect[1]) ? rtrim(parse_url($redirect[1])['path'], '/') : '/';
+                $type = isset($redirect[2]) ? intval($redirect[2]) : 301;
+                $active = $redirect[3] ?? true;
 
-                    $stached_redirect->save();
+                if ($from != '/' && ! Redirect::query()->where('from', $from)->first()) {
+                    try {
+                        $stached_redirect = Redirect::make()
+                            ->from($from)
+                            ->to($to)
+                            ->type($type)
+                            ->active($active);
+    
+                        $stached_redirect->save();
+                    } catch (\Exception $e) {
+                        continue;
+                    }
                 }
             }
         }

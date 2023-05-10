@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file.
 test
 
+## [2.1.3] - 2023-05-10
+ 
+### Added
+ 
+### Changed
+ 
+### Fixed
+
+- Trim trailing '/' from imported urls
+
+
 ## [2.1.2] - 2023-05-10
  
 ### Added
