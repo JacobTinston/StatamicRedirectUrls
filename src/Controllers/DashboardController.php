@@ -10,8 +10,6 @@ class DashboardController
     {
         $redirects = Redirect::all();
 
-        dump($redirects);
-
-        // return view('redirect-urls::dashboard', ['redirects' => $redirects]);
+        return view('redirect-urls::dashboard', ['redirects' => $redirects]);
     }
 }
