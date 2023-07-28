@@ -18,9 +18,6 @@
             "role": "Developer"
         }
     ],
-    "support": {
-        "email": "help@surgems.co.uk"
-    },
     "autoload": {
         "psr-4": {
             "Surgems\\RedirectUrls\\": "src"
