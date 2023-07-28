@@ -2,6 +2,19 @@
 All notable changes to this project will be documented in this file.
 test
 
+## [2.1.4] - 2023-07-28
+ 
+### Added
+ 
+### Changed
+
+- Updated dashboard UI
+ 
+### Fixed
+
+- Better edge case handling
+
+
 ## [2.1.3] - 2023-05-10
  
 ### Added

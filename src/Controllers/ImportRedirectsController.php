@@ -31,13 +31,17 @@ class ImportRedirectsController
         $reader->getRows()->each(function (array $data) use (&$skipped) {
             $data = array_values($data);
 
-            $from = isset($data[0]) ? rtrim(parse_url($data[0])['path'], '/') : '/';
-            $to = isset($data[1]) ? rtrim(parse_url($data[1])['path'], '/') : '/';
-            $type = isset($data[2]) ? intval($data[2]) : 301;
-            $active = $data[3] ?? true;
+            try {
+                $from = $data[0] ? rtrim(isset(parse_url($data[0])['path']) ? parse_url($data[0])['path'] : '/', '/') : '/';
+                $from = $from ? $from : '/';
 
-            if ($from != '/' && ! Redirect::query()->where('from', $from)->first()) {
-                try {
+                $to = $data[1] ? rtrim(isset(parse_url($data[1])['path']) ? parse_url($data[1])['path'] : '/', '/') : '/';
+                $to = $to ? $to : '/';
+
+                $type = $data[2] ? intval($data[2]) : 301;
+                $active = $data[3] ?? true;
+
+                if ($from != '/' && !Redirect::query()->where('from', $from)->first() && $from != $to) {
                     $redirect = Redirect::make()
                         ->from($from)
                         ->to($to)
@@ -45,10 +49,10 @@ class ImportRedirectsController
                         ->active($active);
 
                     $redirect->save();
-                } catch (\Exception $e) {
+                } else {
                     return $skipped++;
                 }
-            } else {
+            } catch (\Exception $e) {
                 return $skipped++;
             }
         });
@@ -56,7 +60,7 @@ class ImportRedirectsController
         $message = 'Redirects imported successfully.';
 
         if ($skipped > 0) {
-            $message .= " {$skipped} rows skipped due to invalid data.";
+            $message .= " {$skipped} rows skipped due to duplicates or invalid data.";
         }
 
         session()->flash('success', $message);

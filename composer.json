@@ -1,8 +1,8 @@
 {
     "name": "surgems/redirect-urls",
     "description": "Statamic Addon that redirects URLs.",
-    "version": "2.1.3",
-    "latestVersion": "2.1.3",
+    "version": "2.1.4",
+    "latestVersion": "2.1.4",
     "keywords": [
         "surgems",
         "statamic",
