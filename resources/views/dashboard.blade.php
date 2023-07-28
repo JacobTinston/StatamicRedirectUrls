@@ -54,6 +54,7 @@
                         <th class="actions-column"></th>
                     </tr>
                 </thead> 
+                
                 <tbody tabindex="0"> 
                     @foreach ($redirects as $redirect)
                         <tr class="sortable-row outline-none" tabindex="0">

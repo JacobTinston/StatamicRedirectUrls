@@ -25,7 +25,7 @@ class ImportRedirectsController
         $extension = with($file->extension(), fn ($ext) => $ext === 'txt' ? 'csv' : $ext);
 
         $reader = SimpleExcelReader::create($file->getRealPath(), $extension)
-            ->useDelimiter($delimiter);
+            ->useDelimiter($delimiter); 
 
         $skipped = 0;
         $reader->getRows()->each(function (array $data) use (&$skipped) {

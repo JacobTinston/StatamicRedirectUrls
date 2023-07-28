@@ -12,7 +12,7 @@ class RedirectController
     {
         Redirect::find($request->id)->delete();
 
-        Cache::flush();
+        Cache::flush(); 
 
         session()->flash('success', 'Redirect deleted successfully.');
 
